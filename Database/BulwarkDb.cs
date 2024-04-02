@@ -34,23 +34,52 @@ public class BulwarkDb : DbContext
     {
         modelBuilder.Entity<Booking>(entity =>
         {
-        
+            entity.HasOne(x => x.Customer)
+                .WithMany(y => y.Bookings)
+                .HasForeignKey(x => x.CustomerId)
+                .IsRequired(true);
+
+            entity.HasOne(x => x.Table)
+                .WithMany(y => y.Bookings)
+                .HasForeignKey(x => x.TableId)
+                .IsRequired(true);
+
+            entity.HasOne(x => x.Customer)
+                .WithMany(y => y.Bookings)
+                .HasForeignKey(x => x.CustomerId)
+                .IsRequired(true);
         });
 
-        modelBuilder.Entity<Category>(entity =>
-        {
-        
-        });
-
-        modelBuilder.Entity<CustomerInterest>(entity =>
-        {
-        
-        });
+        //modelBuilder.Entity<Category>(entity =>{ });
 
         modelBuilder.Entity<Customer>(entity =>
         {
-        
+            entity.HasMany(x => x.InterestedCategories)
+                .WithMany(y => y.InterestedCustomers)
+                .UsingEntity<CustomerInterest>(
+                    z => z.HasOne(ci => ci.Category)
+                        .WithMany()
+                        .HasForeignKey(ci => ci.CategoryId)
+                        .HasPrincipalKey(cat => cat.CategoryId),
+                    z => z.HasOne(ci => ci.Customer)
+                        .WithMany()
+                        .HasForeignKey(ci => ci.CustomerId)
+                        .HasPrincipalKey(cus => cus.CustomerId));
+
+            entity.HasMany(x => x.WatchedProducts)
+                .WithMany(y => y.InterestedCustomers)
+                .UsingEntity<WatchList>(
+                    z => z.HasOne(wl => wl.Product)
+                        .WithMany()
+                        .HasForeignKey(wl => wl.ProductId)
+                        .HasPrincipalKey(x => x.ProductId),
+                    z => z.HasOne(wl => wl.Customer)
+                        .WithMany()
+                        .HasForeignKey(wl => wl.CustomerId)
+                        .HasPrincipalKey(y => y.CustomerId));
         });
+
+        //modelBuilder.Entity<CustomerInterest>(entity =>{ });
 
         modelBuilder.Entity<EventDetails>(entity =>
         {

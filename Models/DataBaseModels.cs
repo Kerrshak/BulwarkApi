@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace BulwarkApi.Models
 {
@@ -8,10 +9,8 @@ namespace BulwarkApi.Models
         public int BookingId { get; set; }    
     //[CustomerId] INT NOT NULL,
         public int CustomerId { get; set; }
-        public required Customer Customer { get; set; }
     //[TableId] INT NOT NULL, 
         public int TableId { get; set; }
-        public required Table Table { get; set; }
     //[BookedFor] DATETIME NOT NULL, 
         public DateTime BookedFor { get; set; }
     //[BookedUntil] DATETIME NOT NULL, 
@@ -22,7 +21,14 @@ namespace BulwarkApi.Models
         public string? SpecialRequests { get; set; }
     //[CategoryId] INT NULL
         public int CategoryId { get; set; }
-        public required Category Category { get; set; }
+
+        #region relationships
+
+        public Customer Customer { get; set; } = null!;
+        public Table Table { get; set; } = null!;
+        public Category Category { get; set; } = null!;
+
+        #endregion
     }
 
     public class Category
@@ -39,21 +45,15 @@ namespace BulwarkApi.Models
         public string? EventInfo { get; set; }
         //[MainCategoryId] INT NULL
         public int? MainCategoryId { get; set; }
-        public required List<Booking> Bookings { get; set; }
-        public required List<CustomerInterest> CustomerInterests { get; set; }
-        public required List<Product> Products { get; set; }
-    }
 
-    public class CustomerInterest
-    {
-    //    [CustomerInterestId] INT NOT NULL PRIMARY KEY,
-        public int CustomerInterestId { get; set; }
-    //[CustomerId] INT NOT NULL, 
-        public int CustomerId { get; set; }
-        public required Customer Customer { get; set; }
-    //[CategoryId] INT NOT NULL
-        public int CategoryId { get; set; }
-        public required Category Category { get; set; }
+        #region relationships
+
+        public ICollection<Booking> Bookings { get; } = new List<Booking>();
+        public ICollection<Customer> InterestedCustomers { get; } = new List<Customer>();
+        public ICollection<CustomerInterest> CustomerInterests { get; } = new List<CustomerInterest>();
+        public ICollection<Product> Products { get; } = new List<Product>();
+
+        #endregion
     }
 
     public class Customer
@@ -82,10 +82,31 @@ namespace BulwarkApi.Models
         public string? EncryptedPassword { get; set; }
         public bool IsAdmin { get; set; } = false;
 
-        public required List<Booking> Bookings { get; set; }
-        public required List<CustomerInterest> CustomerInterests { get; set; }
-        public required List<Order> Orders { get; set; }
-        public required List<WatchList> WatchListItems { get; set; }
+        #region relationships
+
+        public ICollection<Booking> Bookings { get; } = new List<Booking>();
+        public ICollection<CustomerInterest> CustomerInterests { get; } = new List<CustomerInterest>();
+        public ICollection<Category> InterestedCategories { get; } = new List<Category>();
+        public ICollection<Order> Orders { get; } = new List<Order>();
+        public ICollection<Product> WatchedProducts { get; } = new List<Product>();
+        public ICollection<WatchList> WatchListItems { get; } = new List<WatchList>();
+
+        #endregion
+    }
+
+    public class CustomerInterest
+    {
+    //[CustomerId] INT NOT NULL, 
+        public int CustomerId { get; set; }
+    //[CategoryId] INT NOT NULL
+        public int CategoryId { get; set; }
+
+        #region relationships
+
+        public Customer Customer { get; set; } = null!;
+        public Category Category { get; set; } = null!;
+        
+        #endregion
     }
 
     public class EventDetails
@@ -104,25 +125,35 @@ namespace BulwarkApi.Models
         public decimal? Price { get; set; }
     //[Capacity] INT NULL 
         public int? Capacity { get; set; }
+
+        #region relationships
+
+        public Promotion? Promotion { get; set; }
+
+        #endregion
     }
 
     public class OrderItem
     {
         public int OrderItemId { get; set; }
         public int OrderId { get; set; }
-        public required Order Order { get; set; }
         public int ProductId { get; set; }
-        public required Product Product { get; set; }
         public int Quantity { get; set; }
         public DateTime? FulfillmentDate { get; set; }
         public decimal UnitPriceAtOrder { get; set; }
+
+        #region relationships
+
+        public Order Order { get; set; } = null!;
+        public Product Product { get; set; } = null!;
+
+        #endregion
     }
 
     public class Order
     {
         public int OrderId { get; set; }
         public int CustomerId { get; set; }
-        public required Customer Customer { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required string ContactNumber { get; set; }
@@ -139,25 +170,38 @@ namespace BulwarkApi.Models
         public bool Collection { get; set; }
         public bool VariablePrice { get; set; }
         public bool ConfirmedOrder { get; set; }
-        public required List<OrderItem> OrderItems { get; set; }
+
+        #region relationships
+
+        public Customer Customer { get; set; } = null!;
+        public ICollection<OrderItem> OrderItems { get; } = new List<OrderItem>();
+
+        #endregion
     }
 
     public class Product
     {
         public int ProductId { get; set; }
         public int CategoryId { get; set; }
-        public required Category Category { get; set; }
         public required string Name { get; set; }
         public string? Description { get; set; }
         public int? Stock { get; set; }
         public decimal? Price { get; set; }
+        public decimal? Discount { get; set; }
         public string? ImageUrls { get; set; }
         public bool PreOrder { get; set; }
         public bool ReStock { get; set; }
         public DateTime? NextDueIn { get; set; }
         public string? Serial { get; set; }
-        public required List<OrderItem> OrderedItems { get; set; }
-        public required List<WatchList> WatchListEntries { get; set; }
+
+        #region relationships
+
+        public required Category Category { get; set; }
+        public ICollection<Customer> InterestedCustomers { get; set; } = new List<Customer>();
+        public ICollection<OrderItem> OrderedItems { get; set; } = new List<OrderItem>();
+        public ICollection<WatchList> WatchListEntries { get; set; } = new List<WatchList>();
+
+        #endregion
     }
 
     public class Promotion
@@ -171,7 +215,12 @@ namespace BulwarkApi.Models
         public string? SqlString { get; set; }
         public int? OrderInSlideShow { get; set; }
         public int? EventId { get; set; }
+
+        #region relationships
+
         public EventDetails? Event { get; set; }
+
+        #endregion
     }
 
     public class Table
@@ -181,16 +230,25 @@ namespace BulwarkApi.Models
         public int Seats { get; set; }
         public string? Position { get; set; }
         public int? ConnectedTableId { get; set; }
-        public required List<Booking> Bookings { get; set; }
+
+        #region relationships
+
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+
+        #endregion
     }
 
     public class WatchList
     {
-        public int WatchListId { get; set;}
         public int CustomerId { get; set; }
-        public required Customer Customer { get; set; }
         public int ProductId { get; set; }
-        public required Product Product { get; set; }
         public DateTime AddedToList { get; set; }
+
+        #region relationships
+
+        public Customer Customer { get; set; } = null!;
+        public Product Product { get; set; } = null!;
+
+        #endregion
     }
 }
