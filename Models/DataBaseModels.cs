@@ -125,12 +125,6 @@ namespace BulwarkApi.Models
         public decimal? Price { get; set; }
     //[Capacity] INT NULL 
         public int? Capacity { get; set; }
-
-        #region relationships
-
-        public Promotion? Promotion { get; set; }
-
-        #endregion
     }
 
     public class OrderItem
@@ -153,7 +147,7 @@ namespace BulwarkApi.Models
     public class Order
     {
         public int OrderId { get; set; }
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required string ContactNumber { get; set; }
@@ -173,7 +167,7 @@ namespace BulwarkApi.Models
 
         #region relationships
 
-        public Customer Customer { get; set; } = null!;
+        public Customer? Customer { get; set; }
         public ICollection<OrderItem> OrderItems { get; } = new List<OrderItem>();
 
         #endregion
@@ -214,13 +208,6 @@ namespace BulwarkApi.Models
         public bool Active { get; set; }
         public string? SqlString { get; set; }
         public int? OrderInSlideShow { get; set; }
-        public int? EventId { get; set; }
-
-        #region relationships
-
-        public EventDetails? Event { get; set; }
-
-        #endregion
     }
 
     public class Table

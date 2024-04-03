@@ -81,40 +81,41 @@ public class BulwarkDb : DbContext
 
         //modelBuilder.Entity<CustomerInterest>(entity =>{ });
 
-        modelBuilder.Entity<EventDetails>(entity =>
-        {
-        
-        });
+        //modelBuilder.Entity<EventDetails>(entity =>{ });
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-        
+            entity.HasOne(x => x.Order)
+                .WithMany(y => y.OrderItems)
+                .HasForeignKey(x => x.OrderId)
+                .IsRequired(true);
+
+            entity.HasOne(x => x.Product)
+                .WithMany(y => y.OrderedItems)
+                .HasForeignKey(x => x.ProductId)
+                .IsRequired(true);
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-        
+            entity.HasOne(x => x.Customer)
+                .WithMany(y => y.Orders)
+                .HasForeignKey(x => x.CustomerId)
+                .IsRequired(true);
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-        
+            entity.HasOne(x => x.Category)
+                .WithMany(y => y.Products)
+                .HasForeignKey(x => x.CategoryId)
+                .IsRequired(true);
         });
 
-        modelBuilder.Entity<Promotion>(entity =>
-        {
-        
-        });
+        //modelBuilder.Entity<Promotion>(entity => { });
 
-        modelBuilder.Entity<Table>(entity =>
-        {
-        
-        });
+        //modelBuilder.Entity<Table>(entity => { });
 
-        modelBuilder.Entity<WatchList>(entity =>
-        {
-        
-        });
-
+        //modelBuilder.Entity<WatchList>(entity => { });
     }
 }
