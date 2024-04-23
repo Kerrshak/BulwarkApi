@@ -3,7 +3,7 @@
 namespace BulwarkApi.Controllers;
 
 [Route("api/[controller]")]
-public class ProductController
+public class BookingController
 {
 
 }

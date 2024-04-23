@@ -1,4 +1,8 @@
+using BulwarkApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
+
+Settings.ConfigureSettings(builder.Configuration);
 
 // Add services to the container.
 
