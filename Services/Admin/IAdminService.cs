@@ -1,6 +1,5 @@
-﻿namespace BulwarkApi.Services.Admin
+﻿namespace BulwarkApi.Services.Admin;
+
+public interface IAdminService
 {
-    public interface IAdminService
-    {
-    }
 }

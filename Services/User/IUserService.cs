@@ -1,6 +1,5 @@
-﻿namespace BulwarkApi.Services.User
+﻿namespace BulwarkApi.Services.User;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-    }
 }

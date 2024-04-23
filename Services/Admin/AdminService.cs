@@ -1,6 +1,5 @@
-﻿namespace BulwarkApi.Services.Admin
+﻿namespace BulwarkApi.Services.Admin;
+
+public class AdminService
 {
-    public class AdminService
-    {
-    }
 }

@@ -1,6 +1,5 @@
-﻿namespace BulwarkApi.Services.User
+﻿namespace BulwarkApi.Services.User;
+
+public class UserService
 {
-    public class UserService
-    {
-    }
 }

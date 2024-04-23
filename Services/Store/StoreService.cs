@@ -1,17 +1,9 @@
-﻿using BulwarkApi.Models;
+﻿using BulwarkApi.Database;
+using BulwarkApi.Models;
 
-namespace BulwarkApi.Services.Store
+namespace BulwarkApi.Services.Store;
+
+public class StoreService : IStoreService
 {
-    public class StoreService
-    {
-        public StoreService()
-        {
 
-        }
-
-        public List<Product> FetchProducts()
-        {
-
-        }
-    }
 }

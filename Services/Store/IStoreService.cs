@@ -1,6 +1,5 @@
-﻿namespace BulwarkApi.Services.Store
+﻿namespace BulwarkApi.Services.Store;
+
+public interface IStoreService
 {
-    public interface IStoreService
-    {
-    }
 }
